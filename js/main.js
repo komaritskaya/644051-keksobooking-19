@@ -1,7 +1,5 @@
 'use strict';
 
-// 1. Генерация массива JS-объектов со случайными данными
-
 var ADS_NUMBER = 8;
 var MIN_Y = 130;
 var MAX_Y = 630;
@@ -81,12 +79,6 @@ var generateItems = function (count) {
   return items;
 };
 
-// 2. Переключение карты в активное состояние
-
-map.classList.remove('map--faded');
-
-// 3. Создание DOM-элементов, соответствующих меткам карты, и заполнение их данными из массива
-
 var pinTemplate = document.querySelector('#pin');
 
 var renderSinglePin = function (item) {
@@ -108,5 +100,7 @@ var renderAllPins = function (arr) {
   }
   mapContainer.appendChild(fragment);
 };
+
+map.classList.remove('map--faded');
 
 renderAllPins(generateItems(ADS_NUMBER));

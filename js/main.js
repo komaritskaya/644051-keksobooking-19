@@ -57,12 +57,12 @@ var generateItems = function (count) {
     };
     var item = {
       'author': {
-        'avatar': 'img/avatars/user0' + (i + 1).toString() + '.png',
+        'avatar': 'img/avatars/user0' + getRandomInt(0, 8) + '.png',
       },
       'offer': {
         'title': 'Предложение ' + (i + 1).toString(),
         'address': location.x.toString() + ', ' + location.y.toString(),
-        'price': getRandomInt(1, 5) * 10000,
+        'price': getRandomInt(1000, 50000),
         'type': getSingleRandomItemFromArray(TYPES),
         'rooms': getRandomInt(1, 5),
         'guests': getRandomInt(1, 10),

@@ -132,6 +132,7 @@ var activateMap = function () {
   setFormElementsStatus(adFormFieldsetElements, true);
   renderAllPins(generateItems(ADS_NUMBER));
   validateAllFields();
+  mapPinMainElement.disabled = true;
 };
 
 var deactivateMap = function () {

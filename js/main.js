@@ -132,7 +132,8 @@ var activateMap = function () {
   setFormElementsStatus(adFormFieldsetElements, true);
   renderAllPins(generateItems(ADS_NUMBER));
   validateAllFields();
-  mapPinMainElement.disabled = true;
+  mapPinMainElement.removeEventListener('mousedown', mapPinMainElementClickHandler);
+  mapPinMainElement.removeEventListener('keydown', mapPinMainElementKeydownHandler);
 };
 
 var deactivateMap = function () {
@@ -253,18 +254,21 @@ var setErrorStyle = function (element) {
   }
 };
 
+var mapPinMainElementClickHandler = function (evt) {
+  if (evt.button === MAIN_MOUSE_BTN) {
+    activateMap();
+  }
+}
+var mapPinMainElementKeydownHandler = function (evt) {
+  if (evt.keyCode === ENTER_KEY) {
+    activateMap();
+  }
+}
+
 deactivateMap();
 
 adFormElement.addEventListener('change', formChangeHandler);
 adFormElement.addEventListener('input', formInputHandler);
 
-mapPinMainElement.addEventListener('mousedown', function (evt) {
-  if (evt.button === MAIN_MOUSE_BTN) {
-    activateMap();
-  }
-});
-mapPinMainElement.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEY) {
-    activateMap();
-  }
-});
+mapPinMainElement.addEventListener('mousedown', mapPinMainElementClickHandler);
+mapPinMainElement.addEventListener('keydown', mapPinMainElementKeydownHandler);

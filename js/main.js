@@ -118,15 +118,9 @@ var renderAllPins = function (arr) {
   mapContainerElement.appendChild(fragment);
 };
 
-var disableFormElements = function (collection) {
+var setFormElementsStatus = function (collection, status) {
   for (var i = 0; i < collection.length; i++) {
-    collection[i].disabled = true;
-  }
-};
-
-var enableFormElements = function (collection) {
-  for (var i = 0; i < collection.length; i++) {
-    collection[i].disabled = false;
+    collection[i].disabled = !status;
   }
 };
 
@@ -134,8 +128,8 @@ var activateMap = function () {
   mapElement.classList.remove('map--faded');
   renderAddress(getMainPinCoords(true));
   adFormElement.classList.remove('ad-form--disabled');
-  enableFormElements(mapFiltersFieldsetElements);
-  enableFormElements(adFormFieldsetElements);
+  setFormElementsStatus(mapFiltersFieldsetElements, true);
+  setFormElementsStatus(adFormFieldsetElements, true);
   renderAllPins(generateItems(ADS_NUMBER));
   validateAllFields();
 };
@@ -144,23 +138,21 @@ var deactivateMap = function () {
   mapElement.classList.add('map--faded');
   renderAddress(getMainPinCoords(false));
   adFormElement.classList.add('ad-form--disabled');
-  disableFormElements(mapFiltersFieldsetElements);
-  disableFormElements(adFormFieldsetElements);
+  setFormElementsStatus(mapFiltersFieldsetElements, false);
+  setFormElementsStatus(adFormFieldsetElements, false);
 };
 
 var getMainPinCoords = function (isActive) {
-  var mainPinWidth = mapPinMainElement.offsetWidth;
-  var mainPinHeight = mapPinMainElement.offsetHeight;
   if (isActive) {
     var pintailHeight = window.getComputedStyle(mapPinMainElement, '::after').getPropertyValue('height');
     return {
-      x: Math.round(parseInt(mapPinMainElement.style.left, 10) + mainPinWidth / 2),
-      y: Math.round(parseInt(mapPinMainElement.style.top, 10) + mainPinHeight + parseInt(pintailHeight, 10))
+      x: Math.round(mapPinMainElement.offsetLeft + mapPinMainElement.offsetWidth / 2),
+      y: Math.round(mapPinMainElement.offsetTop + mapPinMainElement.offsetHeight + parseInt(pintailHeight, 10))
     };
   } else {
     return {
-      x: Math.round(parseInt(mapPinMainElement.style.left, 10) + mainPinWidth / 2),
-      y: Math.round(parseInt(mapPinMainElement.style.top, 10) + mainPinHeight / 2)
+      x: Math.round(mapPinMainElement.offsetLeft + mapPinMainElement.offsetWidth / 2),
+      y: Math.round(mapPinMainElement.offsetTop + mapPinMainElement.offsetHeight / 2)
     };
   }
 };

@@ -258,12 +258,13 @@ var mapPinMainElementClickHandler = function (evt) {
   if (evt.button === MAIN_MOUSE_BTN) {
     activateMap();
   }
-}
+};
+
 var mapPinMainElementKeydownHandler = function (evt) {
   if (evt.keyCode === ENTER_KEY) {
     activateMap();
   }
-}
+};
 
 deactivateMap();
 

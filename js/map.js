@@ -22,13 +22,17 @@
     }
   };
 
-  var renderAllPins = function (arr) {
+  var dataSuccessHandler = function (arr) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < arr.length; i++) {
       fragment.appendChild(window.pin.renderSinglePin(arr[i]));
     }
     mapContainerElement.appendChild(fragment);
+  };
+
+  var dataErrorHandler = function (errorMessage) {
+    window.error.openErrorPopup(errorMessage, activateMap);
   };
 
   var setFormElementsStatus = function (collection, status) {
@@ -43,7 +47,7 @@
     window.form.adFormElement.classList.remove('ad-form--disabled');
     setFormElementsStatus(mapFiltersFieldsetElements, true);
     setFormElementsStatus(window.form.adFormFieldsetElements, true);
-    renderAllPins(window.data.generateItems(window.data.ADS_NUMBER));
+    window.data.load(dataSuccessHandler, dataErrorHandler);
     window.form.validateAllFields();
     mapPinMainElement.removeEventListener('mousedown', mapPinMainElementClickHandler);
     mapPinMainElement.removeEventListener('keydown', mapPinMainElementKeydownHandler);

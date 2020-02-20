@@ -7,6 +7,8 @@
   var mapFiltersElement = document.querySelector('.map__filters');
   var mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll('input, textarea, select');
 
+  var pins = [];
+
   var getMainPinCoords = function (isActive) {
     if (isActive) {
       var pintailHeight = window.getComputedStyle(mapPinMainElement, '::after').getPropertyValue('height');
@@ -23,16 +25,30 @@
   };
 
   var dataSuccessHandler = function (arr) {
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < arr.length; i++) {
-      fragment.appendChild(window.pin.renderSinglePin(arr[i]));
-    }
-    mapContainerElement.appendChild(fragment);
+    pins = arr;
+    updatePins(pins);
   };
 
   var dataErrorHandler = function (errorMessage) {
     window.error.openErrorPopup(errorMessage, activateMap);
+  };
+
+  var filterPins = function (callback) {
+    var filteredPins = pins.filter(function (pin) {
+      return callback(pin);
+    });
+    updatePins(filteredPins);
+  };
+
+  var updatePins = function (arr) {
+    clearPins();
+    window.render(arr);
+  };
+
+  var clearPins = function () {
+    while (mapContainerElement.firstChild) {
+      mapContainerElement.removeChild(mapContainerElement.firstChild);
+    }
   };
 
   var setFormElementsStatus = function (collection, status) {
@@ -79,6 +95,7 @@
   mapPinMainElement.addEventListener('keydown', mapPinMainElementKeydownHandler);
 
   window.map = {
-    mapContainerElement: mapContainerElement
+    mapFiltersElement: mapFiltersElement,
+    filterPins: filterPins
   };
 })();

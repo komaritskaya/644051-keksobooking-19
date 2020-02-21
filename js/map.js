@@ -26,6 +26,7 @@
 
   var dataSuccessHandler = function (newPins) {
     pins = newPins;
+    window.card.renderCard(pins[0]);
     updatePins(pins);
   };
 
@@ -46,9 +47,7 @@
   };
 
   var clearPins = function () {
-    while (mapContainerElement.firstChild) {
-      mapContainerElement.removeChild(mapContainerElement.firstChild);
-    }
+    window.utils.removeChildren(mapContainerElement);
   };
 
   var setFormElementsStatus = function (collection, status) {

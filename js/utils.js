@@ -33,7 +33,7 @@
     while (element.firstChild) {
       element.removeChild(element.firstChild);
     }
-  }
+  };
 
   window.utils = {
     MAIN_MOUSE_BTN: MAIN_MOUSE_BTN,

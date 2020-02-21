@@ -24,8 +24,8 @@
     }
   };
 
-  var dataSuccessHandler = function (arr) {
-    pins = arr;
+  var dataSuccessHandler = function (newPins) {
+    pins = newPins;
     updatePins(pins);
   };
 
@@ -40,9 +40,9 @@
     updatePins(filteredPins);
   };
 
-  var updatePins = function (arr) {
+  var updatePins = function (newPins) {
     clearPins();
-    window.render(arr);
+    window.render.renderPins(newPins);
   };
 
   var clearPins = function () {

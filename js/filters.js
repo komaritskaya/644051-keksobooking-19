@@ -8,8 +8,10 @@
   var housingGuestsSelectElement = mapFiltersElement.querySelector('#housing-guests');
   var housingFeaturesContainerElement = mapFiltersElement.querySelector('#housing-features');
 
-  var LOW_PRICE = 10000;
-  var HIGH_PRICE = 50000;
+  var Price = {
+    LOW: 10000,
+    HIGH: 50000
+  };
 
   var checkType = function (item) {
     return item.offer.type === housingTypeSelectElement.value
@@ -19,12 +21,11 @@
   var checkPrice = function (item) {
     switch (housingPriceSelectElement.value) {
       case 'low':
-        return item.offer.price <= LOW_PRICE;
+        return item.offer.price <= Price.LOW;
       case 'middle':
-        return item.offer.price >= LOW_PRICE && item.offer.price <= HIGH_PRICE;
+        return item.offer.price >= Price.LOW && item.offer.price <= Price.HIGH;
       case 'high':
-        return item.offer.price >= HIGH_PRICE;
-      case 'any':
+        return item.offer.price >= Price.HIGH;
       default:
         return true;
     }

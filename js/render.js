@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var ADS_COUNT = 5;
+  var MAX_ADS_COUNT = 5;
 
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
@@ -21,13 +21,16 @@
     return itemElement;
   };
 
-  window.render = function (arr) {
-    var takeNumber = arr.length > ADS_COUNT ? ADS_COUNT : arr.length;
+  var renderPins = function (pins) {
+    var takeNumber = pins.length > MAX_ADS_COUNT ? MAX_ADS_COUNT : pins.length;
     var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(renderSinglePin(arr[i]));
-    }
+    pins.slice(0, takeNumber).forEach(function (pin) {
+      fragment.appendChild(renderSinglePin(pin));
+    });
     mapContainerElement.appendChild(fragment);
+  };
+
+  window.render = {
+    renderPins: renderPins
   };
 })();

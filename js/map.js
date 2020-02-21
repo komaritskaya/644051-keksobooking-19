@@ -27,6 +27,7 @@
 
     for (var i = 0; i < arr.length; i++) {
       fragment.appendChild(window.pin.renderSinglePin(arr[i]));
+      window.card.renderCard(arr[i]);
     }
     mapContainerElement.appendChild(fragment);
   };

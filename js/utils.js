@@ -29,12 +29,19 @@
     return newArr;
   };
 
+  var removeChildren = function (element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
+
   window.utils = {
     MAIN_MOUSE_BTN: MAIN_MOUSE_BTN,
     ENTER_KEY: ENTER_KEY,
 
     getRandomInt: getRandomInt,
     getSingleRandomItemFromArray: getSingleRandomItemFromArray,
-    getMultipleRandomItemsFromArray: getMultipleRandomItemsFromArray
+    getMultipleRandomItemsFromArray: getMultipleRandomItemsFromArray,
+    removeChildren: removeChildren
   };
 })();

@@ -18,6 +18,14 @@
     pinBtn.style.top = (item.location.y - PIN_HEIGHT).toString() + 'px';
     pinImg.src = item.author.avatar;
     pinImg.alt = item.offer.title;
+    pinBtn.addEventListener('click', function () {
+      window.card.renderCard(item);
+    });
+    pinBtn.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.utils.ENTER_KEY) {
+        window.card.renderCard(item);
+      }
+    });
     return itemElement;
   };
 

@@ -26,7 +26,6 @@
 
   var dataSuccessHandler = function (newPins) {
     pins = newPins;
-    window.card.renderCard(pins[0]);
     updatePins(pins);
   };
 

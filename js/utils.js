@@ -3,6 +3,7 @@
 (function () {
   var MAIN_MOUSE_BTN = 0;
   var ENTER_KEY = 13;
+  var ESC_KEY = 27;
 
   var getRandomInt = function (min, max) {
     min = Math.ceil(min);
@@ -38,6 +39,7 @@
   window.utils = {
     MAIN_MOUSE_BTN: MAIN_MOUSE_BTN,
     ENTER_KEY: ENTER_KEY,
+    ESC_KEY: ESC_KEY,
 
     getRandomInt: getRandomInt,
     getSingleRandomItemFromArray: getSingleRandomItemFromArray,

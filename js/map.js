@@ -46,7 +46,11 @@
   };
 
   var clearPins = function () {
-    window.utils.removeChildren(mapContainerElement);
+    mapContainerElement.childNodes.forEach(function (node) {
+      if (node !== mapPinMainElement) {
+        mapContainerElement.removeChild(node);
+      }
+    });
   };
 
   var setFormElementsStatus = function (collection, status) {

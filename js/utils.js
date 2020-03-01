@@ -36,6 +36,12 @@
     }
   };
 
+  var setFormElementsStatus = function (collection, status) {
+    for (var i = 0; i < collection.length; i++) {
+      collection[i].disabled = !status;
+    }
+  };
+
   window.utils = {
     MAIN_MOUSE_BTN: MAIN_MOUSE_BTN,
     ENTER_KEY: ENTER_KEY,
@@ -44,6 +50,7 @@
     getRandomInt: getRandomInt,
     getSingleRandomItemFromArray: getSingleRandomItemFromArray,
     getMultipleRandomItemsFromArray: getMultipleRandomItemsFromArray,
-    removeChildren: removeChildren
+    removeChildren: removeChildren,
+    setFormElementsStatus: setFormElementsStatus
   };
 })();

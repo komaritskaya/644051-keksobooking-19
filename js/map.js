@@ -10,6 +10,11 @@
   var pins = [];
   var isActive = false;
 
+  var MainPinInitialPosition = {
+    left: mapPinMainElement.style.left,
+    top: mapPinMainElement.style.top
+  };
+
   var CoordsLimit = {
     X: {
       MIN: 0,
@@ -22,15 +27,20 @@
   };
 
   var pintailHeight = window.getComputedStyle(mapPinMainElement, '::after').getPropertyValue('height');
-  var pinWidth = mapPinMainElement.offsetWidth;
-  var pinHeight = isActive ? mapPinMainElement.offsetHeight + parseInt(pintailHeight, 10) : mapPinMainElement.offsetHeight;
-  var pinOffsetWidth = pinWidth / 2;
-  var pinOffsetHeight = isActive ? pinHeight : pinHeight / 2;
+
+  var getMainPinOffsets = function () {
+    var pinWidth = mapPinMainElement.offsetWidth;
+    var pinHeight = isActive ? mapPinMainElement.offsetHeight + parseInt(pintailHeight, 10) : mapPinMainElement.offsetHeight;
+    return {
+      pinOffsetWidth: pinWidth / 2,
+      pinOffsetHeight: isActive ? pinHeight : pinHeight / 2
+    };
+  };
 
   var getMainPinCoords = function () {
     return {
-      x: Math.round(mapPinMainElement.offsetLeft + pinOffsetWidth),
-      y: Math.round(mapPinMainElement.offsetTop + pinOffsetHeight)
+      x: Math.round(mapPinMainElement.offsetLeft + getMainPinOffsets().pinOffsetWidth),
+      y: Math.round(mapPinMainElement.offsetTop + getMainPinOffsets().pinOffsetHeight)
     };
   };
 
@@ -40,7 +50,7 @@
   };
 
   var dataErrorHandler = function (errorMessage) {
-    window.error.openErrorPopup(errorMessage, activateMap);
+    window.message.openErrorPopup(errorMessage, activatePage);
   };
 
   var filterPins = function (callback) {
@@ -56,38 +66,42 @@
   };
 
   var clearPins = function () {
-    mapContainerElement.childNodes.forEach(function (node) {
-      if (node !== mapPinMainElement) {
-        mapContainerElement.removeChild(node);
-      }
+    document.querySelectorAll('.map__pin:not(.map__pin--main)').forEach(function (pin) {
+      pin.remove();
     });
   };
 
-  var setFormElementsStatus = function (collection, status) {
-    for (var i = 0; i < collection.length; i++) {
-      collection[i].disabled = !status;
-    }
+  var returnMainPinToInitial = function () {
+    mapPinMainElement.style.left = MainPinInitialPosition.left;
+    mapPinMainElement.style.top = MainPinInitialPosition.top;
   };
 
   var activateMap = function () {
     mapElement.classList.remove('map--faded');
-    isActive = true;
-    window.form.renderAddress(getMainPinCoords());
-    window.form.adFormElement.classList.remove('ad-form--disabled');
-    setFormElementsStatus(mapFiltersFieldsetElements, true);
-    setFormElementsStatus(window.form.adFormFieldsetElements, true);
-    window.data.load(dataSuccessHandler, dataErrorHandler);
-    window.form.validateAllFields();
+    window.utils.setFormElementsStatus(mapFiltersFieldsetElements, true);
     mapPinMainElement.removeEventListener('keydown', mapPinMainElementKeyDownHandler);
   };
 
   var deactivateMap = function () {
+    clearPins();
     mapElement.classList.add('map--faded');
+    returnMainPinToInitial();
+    window.utils.setFormElementsStatus(mapFiltersFieldsetElements, false);
+  };
+
+  var activatePage = function () {
+    isActive = true;
+    activateMap();
+    window.form.activateForm();
+    window.form.renderAddress(getMainPinCoords(true));
+    window.data.load(dataSuccessHandler, dataErrorHandler);
+  };
+
+  var deactivatePage = function () {
     isActive = false;
-    window.form.renderAddress(getMainPinCoords());
-    window.form.adFormElement.classList.add('ad-form--disabled');
-    setFormElementsStatus(mapFiltersFieldsetElements, false);
-    setFormElementsStatus(window.form.adFormFieldsetElements, false);
+    deactivateMap();
+    window.form.deactivateForm();
+    window.form.renderAddress(getMainPinCoords(false));
   };
 
   var mapPinMainElementMouseDownHandler = function (evt) {
@@ -118,17 +132,17 @@
         var currentCoords = getMainPinCoords();
 
         if ((currentCoords.x - shift.x) < CoordsLimit.X.MIN) {
-          mapPinMainElement.style.left = (CoordsLimit.X.MIN - pinOffsetWidth).toString() + 'px';
+          mapPinMainElement.style.left = (CoordsLimit.X.MIN - getMainPinOffsets().pinOffsetWidth).toString() + 'px';
         } else if ((currentCoords.x - shift.x) > CoordsLimit.X.MAX) {
-          mapPinMainElement.style.left = (CoordsLimit.X.MAX - pinOffsetWidth).toString() + 'px';
+          mapPinMainElement.style.left = (CoordsLimit.X.MAX - getMainPinOffsets().pinOffsetWidth).toString() + 'px';
         } else {
           mapPinMainElement.style.left = (mapPinMainElement.offsetLeft - shift.x).toString() + 'px';
         }
 
         if ((currentCoords.y - shift.y) < CoordsLimit.Y.MIN) {
-          mapPinMainElement.style.top = (CoordsLimit.Y.MIN - pinOffsetHeight).toString() + 'px';
+          mapPinMainElement.style.top = (CoordsLimit.Y.MIN - getMainPinOffsets().pinOffsetHeight).toString() + 'px';
         } else if ((currentCoords.y - shift.y) > CoordsLimit.Y.MAX) {
-          mapPinMainElement.style.top = (CoordsLimit.Y.MAX - pinOffsetHeight).toString() + 'px';
+          mapPinMainElement.style.top = (CoordsLimit.Y.MAX - getMainPinOffsets().pinOffsetHeight).toString() + 'px';
         } else {
           mapPinMainElement.style.top = (mapPinMainElement.offsetTop - shift.y).toString() + 'px';
         }
@@ -141,17 +155,30 @@
         document.removeEventListener('mouseup', mouseUpHandler);
 
         if (dragged) {
-          var onClickPreventDefault = function (clickEvt) {
+          var clickHandlerPreventDefault = function (clickEvt) {
             clickEvt.preventDefault();
-            mapPinMainElement.removeEventListener('click', onClickPreventDefault);
+            mapPinMainElement.removeEventListener('click', clickHandlerPreventDefault);
           };
-          mapPinMainElement.addEventListener('click', onClickPreventDefault);
+          mapPinMainElement.addEventListener('click', clickHandlerPreventDefault);
         } else {
           if (!isActive) {
-            activateMap();
+            activatePage();
+            var currentCoords = getMainPinCoords();
+
+            if (currentCoords.x < CoordsLimit.X.MIN) {
+              mapPinMainElement.style.left = (CoordsLimit.X.MIN - getMainPinOffsets().pinOffsetWidth).toString() + 'px';
+            } else if (currentCoords.x > CoordsLimit.X.MAX) {
+              mapPinMainElement.style.left = (CoordsLimit.X.MAX - getMainPinOffsets().pinOffsetWidth).toString() + 'px';
+            }
+
+            if (currentCoords.y < CoordsLimit.Y.MIN) {
+              mapPinMainElement.style.top = (CoordsLimit.Y.MIN - getMainPinOffsets().pinOffsetHeight).toString() + 'px';
+            } else if (currentCoords.y > CoordsLimit.Y.MAX) {
+              mapPinMainElement.style.top = (CoordsLimit.Y.MAX - getMainPinOffsets().pinOffsetHeight).toString() + 'px';
+            }
           }
         }
-        window.form.renderAddress(getMainPinCoords());
+        window.form.renderAddress(getMainPinCoords(isActive));
       };
 
       document.addEventListener('mousemove', mouseMoveHandler);
@@ -161,14 +188,39 @@
 
   var mapPinMainElementKeyDownHandler = function (evt) {
     if (evt.keyCode === window.utils.ENTER_KEY) {
-      activateMap();
+      activatePage();
     }
   };
 
-  deactivateMap();
+  var adFormSuccessSubmitHandler = function () {
+    window.message.openSuccessPopup(deactivatePage);
+  };
+
+  var adFormErrorSubmitHandler = function (errorMessage) {
+    window.message.openErrorPopup(errorMessage, deactivatePage);
+  };
+
+  deactivatePage();
 
   mapPinMainElement.addEventListener('mousedown', mapPinMainElementMouseDownHandler);
   mapPinMainElement.addEventListener('keydown', mapPinMainElementKeyDownHandler);
+
+  window.form.adFormElement.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.data.save(new FormData(window.form.adFormElement), adFormSuccessSubmitHandler, adFormErrorSubmitHandler);
+  });
+
+  window.form.resetButtonElement.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    deactivatePage();
+  });
+
+  window.form.resetButtonElement.addEventListener('keydown', function (evt) {
+    evt.preventDefault();
+    if (evt.keyCode === window.utils.ENTER_KEY) {
+      deactivatePage();
+    }
+  });
 
   window.map = {
     mapFiltersElement: mapFiltersElement,

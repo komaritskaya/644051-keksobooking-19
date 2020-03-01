@@ -4,6 +4,7 @@
   var ERROR_FIELD_STYLE = 'border-color: red;';
 
   var adFormElement = document.querySelector('.ad-form');
+  var resetButtonElement = adFormElement.querySelector('.ad-form__reset');
   var adFormFieldsetElements = adFormElement.querySelectorAll('input, textarea, select');
   var titleInputElement = adFormElement.querySelector('#title');
   var addressInputElement = adFormElement.querySelector('#address');
@@ -36,7 +37,6 @@
         return 5000;
       case 'palace':
         return 10000;
-      case 'bungalo':
       default:
         return 0;
     }
@@ -109,13 +109,33 @@
     }
   };
 
+  var resetForm = function () {
+    adFormElement.reset();
+    adFormFieldsetElements.forEach(function (element) {
+      element.style.border = null;
+    });
+  };
+
+  var activateForm = function () {
+    adFormElement.classList.remove('ad-form--disabled');
+    window.utils.setFormElementsStatus(adFormFieldsetElements, true);
+    validateAllFields();
+  };
+
+  var deactivateForm = function () {
+    resetForm();
+    adFormElement.classList.add('ad-form--disabled');
+    window.utils.setFormElementsStatus(window.form.adFormFieldsetElements, false);
+  };
+
   adFormElement.addEventListener('change', formChangeHandler);
   adFormElement.addEventListener('input', formInputHandler);
 
   window.form = {
     adFormElement: adFormElement,
-    adFormFieldsetElements: adFormFieldsetElements,
+    resetButtonElement: resetButtonElement,
     renderAddress: renderAddress,
-    validateAllFields: validateAllFields
+    activateForm: activateForm,
+    deactivateForm: deactivateForm
   };
 })();

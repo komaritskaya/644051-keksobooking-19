@@ -52,9 +52,9 @@
     return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
   };
 
-  var formChangeHandler = function () {
+  var formChangeHandler = window.debounce(function () {
     window.map.filterPins(applyAllFilters);
-  };
+  });
 
   mapFiltersElement.addEventListener('change', formChangeHandler);
 })();

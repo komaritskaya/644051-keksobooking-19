@@ -36,7 +36,7 @@
 
         reader.readAsDataURL(file);
       }
-    };
+    }
   };
 
   userAvatarUploaderElement.addEventListener('change', function () {

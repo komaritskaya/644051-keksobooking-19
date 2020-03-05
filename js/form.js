@@ -125,7 +125,7 @@
   var deactivateForm = function () {
     resetForm();
     adFormElement.classList.add('ad-form--disabled');
-    window.utils.setFormElementsStatus(window.form.adFormFieldsetElements, false);
+    window.utils.setFormElementsStatus(adFormFieldsetElements, false);
   };
 
   adFormElement.addEventListener('change', formChangeHandler);

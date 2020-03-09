@@ -84,6 +84,7 @@
 
   var deactivateMap = function () {
     clearPins();
+    window.card.closeCard();
     mapElement.classList.add('map--faded');
     returnMainPinToInitial();
     window.utils.setFormElementsStatus(mapFiltersFieldsetElements, false);

@@ -3,10 +3,11 @@
 (function () {
   var URL_GET = 'https://js.dump.academy/keksobooking/data';
   var URL_SET = 'https://js.dump.academy/keksobooking/';
+  var TIMEOUT = 10000;
+
   var StatusCode = {
     OK: 200
   };
-  var TIMEOUT = 10000;
 
   var handleRequest = function (method, url, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();

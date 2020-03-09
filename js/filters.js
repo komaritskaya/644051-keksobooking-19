@@ -53,6 +53,7 @@
   };
 
   var formChangeHandler = window.debounce(function () {
+    window.card.closeCard();
     window.map.filterPins(applyAllFilters);
   });
 

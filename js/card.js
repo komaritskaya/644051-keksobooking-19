@@ -97,6 +97,7 @@
   };
 
   window.card = {
-    renderCard: renderCard
+    renderCard: renderCard,
+    closeCard: closeCard
   };
 })();

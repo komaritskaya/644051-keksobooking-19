@@ -9,16 +9,30 @@
     errorPopupTextElement.textContent = errorMessage;
     errorPopupBtnElement.textContent = 'Попробовать снова';
     document.querySelector('main').appendChild(errorPopupElement);
-    errorPopupBtnElement.addEventListener('click', function () {
-      document.querySelector('main').removeChild(document.querySelector('.error'));
-      callback();
-    });
+
+    var escPressHandler = function (evt) {
+      if (evt.keyCode === window.utils.ESC_KEY) {
+        document.querySelector('.error').remove();
+        document.removeEventListener('keydown', escPressHandler);
+        callback();
+      }
+    };
+
     errorPopupBtnElement.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.utils.ENTER_KEY) {
-        document.querySelector('main').removeChild(document.querySelector('.error'));
+        document.querySelector('.error').remove();
+        document.removeEventListener('keydown', escPressHandler);
         callback();
       }
     });
+    document.querySelector('.error').addEventListener('click', function (evt) {
+      if (evt.target !== errorPopupTextElement) {
+        document.querySelector('.error').remove();
+        document.removeEventListener('keydown', escPressHandler);
+        callback();
+      }
+    });
+    document.addEventListener('keydown', escPressHandler);
   };
 
   var openSuccessPopup = function (callback) {
@@ -28,12 +42,19 @@
 
     var escPressHandler = function (evt) {
       if (evt.keyCode === window.utils.ESC_KEY) {
-        document.querySelector('main').removeChild(document.querySelector('.success'));
+        document.querySelector('.success').remove();
         document.removeEventListener('keydown', escPressHandler);
         callback();
       }
     };
 
+    document.querySelector('.success').addEventListener('click', function (evt) {
+      if (evt.target !== document.querySelector('.success__message')) {
+        document.querySelector('.success').remove();
+        document.removeEventListener('keydown', escPressHandler);
+        callback();
+      }
+    });
     document.addEventListener('keydown', escPressHandler);
   };
 

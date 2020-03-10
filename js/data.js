@@ -2,7 +2,6 @@
 
 (function () {
   var URL = 'https://js.dump.academy/keksobooking';
-  var urlGet = URL + '/data';
   var TIMEOUT = 10000;
 
   var StatusCode = {
@@ -13,6 +12,8 @@
     GET: 'GET',
     POST: 'POST'
   };
+
+  var urlGet = URL + '/data';
 
   var handleRequest = function (method, url, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();

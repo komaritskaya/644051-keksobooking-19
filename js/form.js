@@ -105,14 +105,14 @@
     if (!element.validity.valid) {
       element.style = ERROR_FIELD_STYLE;
     } else {
-      element.style.border = null;
+      element.style.border = 0;
     }
   };
 
   var resetForm = function () {
     adFormElement.reset();
     adFormFieldsetElements.forEach(function (element) {
-      element.style.border = null;
+      element.style.border = 0;
     });
   };
 

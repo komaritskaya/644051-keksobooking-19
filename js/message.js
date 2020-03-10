@@ -36,6 +36,7 @@
   };
 
   var openSuccessPopup = function (callback) {
+    callback();
     var successTemplateElement = document.querySelector('#success');
     var successPopupElement = successTemplateElement.content.cloneNode(true);
     document.querySelector('main').appendChild(successPopupElement);
@@ -44,7 +45,6 @@
       if (evt.keyCode === window.utils.ESC_KEY) {
         document.querySelector('.success').remove();
         document.removeEventListener('keydown', escPressHandler);
-        callback();
       }
     };
 

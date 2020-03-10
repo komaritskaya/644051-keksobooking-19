@@ -5,6 +5,9 @@
   var mapFiltersContainerElement = document.querySelector('.map__filters-container');
   var cardTemplateElement = document.querySelector('#card');
 
+  var PROPERTY_PHOTO_WIDTH = 45;
+  var PROPERTY_PHOTO_HEIGHT = 40;
+
   var propertyTypeMap = {
     'house': 'Дом',
     'flat': 'Квартира',
@@ -61,8 +64,8 @@
     item.offer.photos.forEach(function (photo) {
       var photosItemElement = document.createElement('img');
       photosItemElement.classList.add('popup__photo');
-      photosItemElement.style.width = '45px';
-      photosItemElement.style.height = '40px';
+      photosItemElement.style.width = PROPERTY_PHOTO_WIDTH.toString() + 'px';
+      photosItemElement.style.height = PROPERTY_PHOTO_HEIGHT.toString() + 'px';
       photosItemElement.alt = 'Фотография жилья';
       photosItemElement.src = photo;
       photosFragmentElement.appendChild(photosItemElement);

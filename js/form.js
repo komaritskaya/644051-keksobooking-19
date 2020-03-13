@@ -2,6 +2,7 @@
 
 (function () {
   var ERROR_FIELD_STYLE = 'border-color: red;';
+  var PRICE_INITIAL_VALUE = 1000;
 
   var adFormElement = document.querySelector('.ad-form');
   var resetButtonElement = adFormElement.querySelector('.ad-form__reset');
@@ -111,6 +112,7 @@
 
   var resetForm = function () {
     adFormElement.reset();
+    priceInputElement.placeholder = PRICE_INITIAL_VALUE.toString();
     adFormFieldsetElements.forEach(function (element) {
       element.style.border = 0;
     });
@@ -124,6 +126,7 @@
 
   var deactivateForm = function () {
     resetForm();
+    window.upload.clearPreviewElements();
     adFormElement.classList.add('ad-form--disabled');
     window.utils.setFormElementsStatus(adFormFieldsetElements, false);
   };
